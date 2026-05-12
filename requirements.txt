@@ -7,5 +7,5 @@ scikit-learn
 opencv-python-headless
 Pillow
 joblib
-mistralai==0.0.12
+mistralai
 gdown
