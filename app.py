@@ -601,8 +601,8 @@ rf_classes = rf_model.classes_
 # ================================
 # MISTRAL CLIENT
 # ================================
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
-mistral_client = MistralClient(api_key=MISTRAL_API_KEY)
+# MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+# mistral_client = MistralClient(api_key=MISTRAL_API_KEY)
 
 # ================================
 # TRANSFORM
@@ -664,13 +664,23 @@ Question: {question}
 
 Reply only YES or NO."""
 
-        response = mistral_client.chat(
-            model="mistral-small-latest",
-            messages=[{"role": "user", "content": classify_prompt}]
+        headers = {
+            "Authorization": f"Bearer {os.getenv('MISTRAL_API_KEY')}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "model": "mistral-small-latest",
+            "messages": [{"role": "user", "content": classify_prompt}]
+        }
+
+        response = requests.post(
+            "https://api.mistral.ai/v1/chat/completions",
+            headers=headers,
+            json=payload
         )
 
-        # ✅ FIX: correct parsing
-        result = response.choices[0].message.content.strip().upper()
+        result = response.json()["choices"][0]["message"]["content"].strip().upper()
 
         return result.startswith("YES")
 
@@ -699,12 +709,23 @@ RULES:
 """
         }
 
-        response = mistral_client.chat(
-            model="mistral-small-latest",
-            messages=[system_instruction] + chat_history
+        headers = {
+            "Authorization": f"Bearer {os.getenv('MISTRAL_API_KEY')}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "model": "mistral-small-latest",
+            "messages": [system_instruction] + chat_history
+        }
+
+        response = requests.post(
+            "https://api.mistral.ai/v1/chat/completions",
+            headers=headers,
+            json=payload
         )
 
-        return response.choices[0].message.content
+        return response.json()["choices"][0]["message"]["content"]
 
     except Exception as e:
         return f"⚠️ Error: {e}"
