@@ -11,7 +11,7 @@ import numpy as np
 import cv2
 import pandas as pd
 import joblib
-from mistralai.client import MistralClient
+import requests
 
 # ================================
 # PAGE SETTINGS
