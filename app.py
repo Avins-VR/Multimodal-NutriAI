@@ -601,8 +601,7 @@ rf_classes = rf_model.classes_
 # ================================
 # MISTRAL CLIENT
 # ================================
-# MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
-# mistral_client = MistralClient(api_key=MISTRAL_API_KEY)
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 
 # ================================
 # TRANSFORM
@@ -665,7 +664,7 @@ Question: {question}
 Reply only YES or NO."""
 
         headers = {
-            "Authorization": f"Bearer {os.getenv('MISTRAL_API_KEY')}",
+            "Authorization": f"Bearer {MISTRAL_API_KEY}",
             "Content-Type": "application/json"
         }
 
@@ -710,7 +709,7 @@ RULES:
         }
 
         headers = {
-            "Authorization": f"Bearer {os.getenv('MISTRAL_API_KEY')}",
+            "Authorization": f"Bearer {MISTRAL_API_KEY}",
             "Content-Type": "application/json"
         }
 
