@@ -1,6 +1,8 @@
 # 🌿 Multimodal NutriAI  
 ### Multimodal Crop Nutrient Deficiency Detection System (with DSEE Architecture)
 
+🔗 Live Demo: https://multimodal-nutriai.streamlit.app
+
 ---
 
 ## 🚨 Problem Statement
