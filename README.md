@@ -240,10 +240,13 @@ Multimodal NutriAI integrates an **LLM-powered chatbot** for better farmer inter
 ## 👨‍💻 Author
 
 **Avins V R**  
-AI & Data Science Student  
-AI & ML Developer
 
-GitHub: https://github.com/Avins-VR
+AI & Data Science Student
+
+AI/ML Developer 
+
+GitHub:
+https://github.com/Avins-VR
 
 ## 📄 License
 
