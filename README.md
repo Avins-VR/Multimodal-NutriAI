@@ -244,3 +244,25 @@ AI & Data Science Student
 AI & ML Developer
 
 GitHub: https://github.com/Avins-VR
+
+## 📄 License
+
+### Proprietary License – All Rights Reserved
+
+This project is proprietary and protected by copyright.
+
+✔ Viewing is permitted for educational, research, recruitment, and evaluation purposes.
+
+❌ Copying is not permitted.
+
+❌ Modification is not permitted.
+
+❌ Redistribution is not permitted.
+
+❌ Commercial use is not permitted.
+
+❌ Reproduction of the DSEE architecture or implementation is not permitted without written permission.
+
+Written permission from the copyright holder is required for any use beyond viewing and evaluation.
+
+© 2026 Multimodal NutriAI — All Rights Reserved.
