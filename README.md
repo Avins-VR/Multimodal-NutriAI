@@ -227,16 +227,6 @@ Multimodal NutriAI integrates an **LLM-powered chatbot** for better farmer inter
 
 ---
 
-## 📌 Tech Stack (Optional)
-
-- **Frontend:** React / Angular  
-- **Backend:** Node.js / Flask  
-- **ML Models:** CNN + DSEE, Scikit-learn  
-- **Database:** PostgreSQL  
-- **APIs:** OpenAI / Azure OpenAI  
-- **Deployment:** Cloud / Edge-ready
-
-
 ## 👨‍💻 Author
 
 **Avins V R**  
