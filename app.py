@@ -62,7 +62,7 @@ st.markdown("""
 
     /* Remove the top gap */
     .block-container {
-        padding-top: 0rem !important;
+        padding-top: 2rem !important;
         padding-right: 1.5rem !important;
         max-width: 100% !important;
     }
@@ -85,12 +85,6 @@ st.markdown("""
 
     html, body { overflow-x: hidden; }
 
-    /* Reduce default Streamlit top padding */
-    .block-container {
-        padding-top: 2rem !important;
-        padding-right: 1.5rem !important;
-        max-width: 100% !important;
-    }
 
     .stApp {
         background-color: #080c0a;
@@ -303,16 +297,26 @@ st.markdown("""
     }
 
     /* Slider override — green accent */
-    [data-testid="stSlider"] > div > div > div > div {
-        background: linear-gradient(90deg, #1e6b3d, #2a9455) !important;
+    /* Slider Track */
+    [data-baseweb="slider"] > div:first-child {
+        background: rgba(74,150,100,0.18) !important;
     }
 
-    [data-testid="stSlider"] > div > div > div > div > div {
+    /* Active Progress */
+    [data-baseweb="slider"] > div:first-child > div {
+        background: linear-gradient(90deg,#1e6b3d,#2a9455) !important;
+    }
+
+    /* Slider Thumb */
+    [data-baseweb="slider"] [role="slider"] {
         background: #7dd9a8 !important;
         border: 2px solid #0b100d !important;
-        box-shadow: 0 0 8px rgba(125,217,168,0.4) !important;
-        width: 14px !important;
-        height: 14px !important;
+        box-shadow: 0 0 10px rgba(125,217,168,.45) !important;
+    }
+
+    /* Slider Value */
+    [data-baseweb="slider"] span {
+        color:#7dd9a8 !important;
     }
 
     [data-testid="stSlider"] {
@@ -336,11 +340,6 @@ st.markdown("""
         border: 1px solid rgba(74,150,100,0.2) !important;
         border-radius: 4px !important;
         padding: 1px 5px !important;
-    }
-
-    /* Slider track background */
-    [data-baseweb="slider"] > div:first-child {
-        background: rgba(74,150,100,0.15) !important;
     }
 
     /* ── MAIN AREA ── */
