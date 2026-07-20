@@ -19,7 +19,8 @@ import requests
 st.set_page_config(
     page_title="Multimodal NutriAI",
     page_icon="🌿",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 MODEL_PATH = "image_model.pth"
@@ -42,19 +43,53 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
     /* ── Reset & Base ── */
-    #MainMenu, footer, header { visibility: hidden; }
+    /* Remove Streamlit header completely */
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
 
-    /* Hide sidebar collapse/expand arrow button */
-    [data-testid="collapsedControl"] { display: none !important; }
-    [data-testid="stSidebarCollapseButton"] { display: none !important; }
-    button[data-testid="baseButton-header"] { display: none !important; }
+    [data-testid="stToolbar"] {
+        display: none !important;
+    }
+
+    #MainMenu {
+        display: none !important;
+    }
+
+    footer {
+        display: none !important;
+    }
+
+    /* Remove the top gap */
+    .block-container {
+        padding-top: 0rem !important;
+        padding-right: 1.5rem !important;
+        max-width: 100% !important;
+    }
+
+    .stAppViewContainer {
+        padding-top: 0 !important;
+    }
+
+    [data-testid="stAppViewContainer"] {
+        padding-top: 0 !important;
+    }
+
+    /* Sidebar collapse/expand arrow button is hidden ONLY on large screens
+       (Large Desktop / Desktop / Laptop / Small Laptop), where the sidebar
+       stays permanently pinned and visible. On Tablet/iPad/Mobile it is
+       restored further down so users can toggle the sidebar. */
+
 
     * { box-sizing: border-box; }
+
+    html, body { overflow-x: hidden; }
 
     /* Reduce default Streamlit top padding */
     .block-container {
         padding-top: 2rem !important;
         padding-right: 1.5rem !important;
+        max-width: 100% !important;
     }
 
     .stApp {
@@ -63,13 +98,13 @@ st.markdown("""
             radial-gradient(ellipse 80% 50% at 20% 0%, rgba(34, 90, 50, 0.18) 0%, transparent 60%),
             radial-gradient(ellipse 60% 40% at 80% 100%, rgba(16, 60, 35, 0.12) 0%, transparent 55%);
         font-family: 'DM Sans', sans-serif;
+        overflow-x: hidden;
     }
 
     /* ── Sidebar ── */
     [data-testid="stSidebar"] {
         background-color: #0b100d;
         border-right: 1px solid rgba(74, 150, 100, 0.15);
-        width: 360px !important;
     }
 
     [data-testid="stSidebar"] .block-container {
@@ -92,7 +127,7 @@ st.markdown("""
     .sidebar-brand-title {
         font-family: 'DM Serif Display', serif;
         color: #7dd9a8;
-        font-size: 1.15rem;
+        font-size: clamp(1rem, 1.15rem, 1.15rem);
         letter-spacing: 0.01em;
         margin-top: 4px;
         line-height: 1.2;
@@ -117,9 +152,21 @@ st.markdown("""
         padding: 1rem 1.5rem 0.5rem;
     }
 
+    /* ── Chat panel header (was inline style) ── */
+    .chat-panel-header {
+        padding-top: 0.8rem;
+        padding-left: 1.2rem;
+    }
+
+    .chat-panel-header .section-label {
+        padding-left: 0;
+    }
+
     /* ── Chat container ── */
     .chat-container {
-        height: 360px;
+        height: 60vh;
+        min-height: 500px;
+        width: 100%;
         overflow-y: auto;
         padding: 0.8rem 1rem;
         background: transparent;
@@ -129,6 +176,15 @@ st.markdown("""
         background: rgba(255,255,255,0.015);
         scrollbar-width: thin;
         scrollbar-color: rgba(74,150,100,0.3) transparent;
+        width: auto;
+        max-width: 100%;
+    }
+
+    /* ── Chat box specific sizing (was inline style) ── */
+    .chat-box-inline {
+        height: clamp(280px, 45vh, 470px);
+        margin: 0;
+        margin-left: 1.2rem;
     }
 
     .chat-container::-webkit-scrollbar { width: 4px; }
@@ -169,6 +225,8 @@ st.markdown("""
         line-height: 1.45;
         max-width: 82%;
         border: 1px solid rgba(74,170,100,0.2);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .assistant-bubble {
@@ -180,6 +238,8 @@ st.markdown("""
         border: 1px solid rgba(74,150,100,0.14);
         line-height: 1.5;
         max-width: 85%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     /* ── Chat input row ── */
@@ -196,6 +256,7 @@ st.markdown("""
         font-family: 'DM Sans', sans-serif !important;
         padding: 8px 12px !important;
         transition: border-color 0.2s !important;
+        width: 100% !important;
     }
 
     .stTextInput input:focus {
@@ -214,10 +275,12 @@ st.markdown("""
         border-radius: 8px !important;
         font-family: 'DM Sans', sans-serif !important;
         font-weight: 500 !important;
-        font-size: 0.82rem !important;
+        font-size: clamp(0.74rem, 0.82rem, 0.82rem) !important;
         letter-spacing: 0.02em !important;
         transition: all 0.2s ease !important;
         padding: 0.45rem 0.9rem !important;
+        width: 100%;
+        white-space: nowrap;
     }
 
     .stButton > button:hover {
@@ -250,6 +313,10 @@ st.markdown("""
         box-shadow: 0 0 8px rgba(125,217,168,0.4) !important;
         width: 14px !important;
         height: 14px !important;
+    }
+
+    [data-testid="stSlider"] {
+        width: 100% !important;
     }
 
     [data-testid="stSlider"] p,
@@ -295,11 +362,12 @@ st.markdown("""
 
     .hero-title {
         font-family: 'DM Serif Display', serif;
-        font-size: 2.8rem;
+        font-size: clamp(1.8rem, 5vw, 2.8rem);
         color: #e8f5ed;
         line-height: 1.1;
         margin-bottom: 0.5rem;
         letter-spacing: -0.02em;
+        word-wrap: break-word;
     }
 
     .hero-title em {
@@ -309,9 +377,10 @@ st.markdown("""
 
     .hero-sub {
         color: rgba(180,220,195,0.45);
-        font-size: 0.88rem;
+        font-size: clamp(0.78rem, 1.6vw, 0.88rem);
         font-weight: 300;
         letter-spacing: 0.02em;
+        padding: 0 0.5rem;
     }
 
     /* ── Upload zone ── */
@@ -320,6 +389,7 @@ st.markdown("""
         border: 1.5px dashed rgba(74,150,100,0.3) !important;
         border-radius: 14px !important;
         transition: border-color 0.2s, background 0.2s !important;
+        flex-wrap: wrap !important;
     }
 
     [data-testid="stFileUploaderDropzone"]:hover {
@@ -337,12 +407,13 @@ st.markdown("""
     .predict-btn .stButton > button {
         background: linear-gradient(135deg, #1a6b3c 0%, #0f4d28 100%) !important;
         color: #9ef5c4 !important;
-        font-size: 0.9rem !important;
+        font-size: clamp(0.8rem, 1.6vw, 0.9rem) !important;
         padding: 0.65rem 1.2rem !important;
         border-radius: 10px !important;
         letter-spacing: 0.04em !important;
         border: 1px solid rgba(100,200,130,0.3) !important;
         box-shadow: 0 2px 20px rgba(20,110,55,0.2) !important;
+        white-space: normal !important;
     }
 
     .predict-btn .stButton > button:hover {
@@ -364,6 +435,7 @@ st.markdown("""
         position: relative;
         overflow: hidden;
         transition: border-color 0.2s;
+        width: 100%;
     }
 
     .result-card::before {
@@ -387,8 +459,9 @@ st.markdown("""
     .result-value {
         font-family: 'DM Serif Display', serif;
         color: #e8f5ed;
-        font-size: 1.25rem;
+        font-size: clamp(1.05rem, 3vw, 1.25rem);
         line-height: 1.2;
+        word-wrap: break-word;
     }
 
     .result-badge {
@@ -408,6 +481,7 @@ st.markdown("""
         background: rgba(74,150,100,0.15);
         margin-top: 8px;
         overflow: hidden;
+        width: 100%;
     }
 
     .confidence-fill {
@@ -423,6 +497,8 @@ st.markdown("""
         font-size: 0.85rem;
         line-height: 1.6;
         font-weight: 300;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     /* ── Probability mini-bars ── */
@@ -431,6 +507,7 @@ st.markdown("""
         align-items: center;
         gap: 8px;
         margin: 5px 0;
+        flex-wrap: wrap;
     }
 
     .prob-name {
@@ -447,6 +524,7 @@ st.markdown("""
         background: rgba(74,150,100,0.12);
         border-radius: 3px;
         overflow: hidden;
+        min-width: 60px;
     }
 
     .prob-fill {
@@ -470,6 +548,17 @@ st.markdown("""
         overflow: hidden;
         background: rgba(255,255,255,0.02);
         padding: 6px;
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .leaf-frame [data-testid="stImage"],
+    .leaf-frame [data-testid="stImage"] img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain;
+        border-radius: 10px;
     }
 
     /* ── Warning box ── */
@@ -494,6 +583,304 @@ st.markdown("""
         animation: scanline 1.8s ease-out forwards;
         pointer-events: none;
         z-index: 9999;
+    }
+
+    /* ================================
+       RESPONSIVE MEDIA QUERIES
+       (added for full responsiveness — no design/logic changes)
+    ================================ */
+
+    /* ── Large Desktop / Desktop (>1400px) — base styles above already apply ── */
+
+    /* ── Small desktop / large laptop ── */
+    @media (max-width: 1400px) {
+        .block-container {
+            padding-right: 1.25rem !important;
+        }
+        [data-testid="stSidebar"] {
+            width: 330px !important;
+        }
+    }
+
+    /* ── Laptop ── */
+    @media (max-width: 1200px) {
+        [data-testid="stSidebar"] {
+            width: 300px !important;
+        }
+        .hero-title {
+            font-size: clamp(1.7rem, 4.5vw, 2.5rem);
+        }
+        .prob-name {
+            width: 110px;
+        }
+    }
+
+    /* ── Small laptop / large tablet ── */
+    @media (max-width: 992px) {
+        .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        [data-testid="stSidebar"] {
+            width: 280px !important;
+        }
+
+        /* ── Sidebar becomes a hidden-by-default, slide-in/out overlay on
+           Tablet/iPad/Mobile, using Streamlit's own native expand/collapse
+           mechanism (aria-expanded + transform) rather than a custom
+           implementation. Taking it out of normal flow here also means the
+           main content automatically reclaims the full width — no manual
+           margin math needed, and nothing shifts unexpectedly when toggled. ── */
+        [data-testid="stSidebar"] {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 100vh !important;
+            z-index: 999998 !important;
+            transition: transform 0.3s ease-in-out !important;
+            box-shadow: 4px 0 28px rgba(0,0,0,0.5);
+        }
+
+        /* Native "open sidebar" arrow — always visible, styled to match theme */
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            position: fixed !important;
+            top: 14px !important;
+            left: 14px !important;
+            z-index: 999999 !important;
+            background: linear-gradient(135deg, #1e6b3d 0%, #165c32 100%) !important;
+            border: 1px solid rgba(74,170,100,0.35) !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important;
+        }
+
+        [data-testid="collapsedControl"] svg {
+            color: #a8f0c8 !important;
+            fill: #a8f0c8 !important;
+        }
+
+        /* Native "close sidebar" button, shown inside the open sidebar */
+        [data-testid="stSidebarCollapseButton"] {
+            display: flex !important;
+        }
+
+        [data-testid="stSidebarCollapseButton"] button svg {
+            color: #a8f0c8 !important;
+            fill: #a8f0c8 !important;
+        }
+
+        /* Stack the two-column layout (main content + chat) vertically */
+        [data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap !important;
+        }
+
+        [data-testid="stHorizontalBlock"] > div[data-testid="column"],
+        [data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+            width: 100% !important;
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+
+        .chat-box-inline {
+            margin-left: 0.4rem;
+            height: clamp(300px, 50vh, 420px);
+        }
+
+        .chat-panel-header {
+            padding-left: 0.4rem;
+        }
+
+        .leaf-frame {
+            max-width: 100%;
+        }
+    }
+
+    /* ── Tablet / iPad portrait ── */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-top: 1.2rem !important;
+            padding-left: 0.8rem !important;
+            padding-right: 0.8rem !important;
+        }
+
+        [data-testid="stSidebar"] {
+            width: 85vw !important;
+            max-width: 320px !important;
+        }
+
+        .main-hero {
+            padding: 1.6rem 0 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(1.5rem, 7vw, 2.1rem);
+        }
+
+        .hero-sub {
+            font-size: clamp(0.75rem, 3vw, 0.85rem);
+        }
+
+        .chat-box-inline {
+            height: clamp(260px, 42vh, 380px);
+            margin-left: 0;
+        }
+
+        .chat-panel-header {
+            padding-left: 0;
+            padding-top: 0.6rem;
+        }
+
+        .sidebar-brand {
+            padding: 1.1rem 1rem 0.8rem;
+        }
+
+        .section-label {
+            padding: 0.8rem 1rem 0.4rem;
+        }
+
+        .soil-section {
+            padding: 0 0.7rem 0.8rem;
+        }
+
+        .prob-name {
+            width: 90px;
+            font-size: 0.66rem;
+        }
+
+        .result-card {
+            padding: 12px 14px;
+        }
+    }
+
+    /* ── Mobile landscape ── */
+    @media (max-width: 576px) {
+        .block-container {
+            padding-left: 0.6rem !important;
+            padding-right: 0.6rem !important;
+        }
+
+        [data-testid="stSidebar"] {
+            width: 90vw !important;
+            max-width: 300px !important;
+        }
+
+        .hero-title {
+            font-size: clamp(1.35rem, 8vw, 1.9rem);
+        }
+
+        .user-bubble,
+        .assistant-bubble {
+            max-width: 92%;
+            font-size: 0.78rem;
+        }
+
+        .chat-container {
+            margin: 0 0.4rem;
+        }
+
+        .chat-box-inline {
+            margin-left: 0;
+            height: clamp(240px, 40vh, 340px);
+        }
+
+        .result-value {
+            font-size: clamp(1rem, 4.5vw, 1.2rem);
+        }
+
+        .prob-row {
+            gap: 6px;
+        }
+
+        .prob-name {
+            width: 80px;
+            font-size: 0.62rem;
+        }
+
+        .prob-pct {
+            width: 32px;
+        }
+    }
+
+    /* ── Mobile portrait ── */
+    @media (max-width: 480px) {
+        .block-container {
+            padding-top: 0.9rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+
+        [data-testid="stSidebar"] {
+            width: 92vw !important;
+            max-width: 280px !important;
+        }
+
+        .sidebar-brand-icon {
+            font-size: 1.5rem;
+        }
+
+        .sidebar-brand-title {
+            font-size: 1rem;
+        }
+
+        .main-hero {
+            padding: 1.2rem 0 0.8rem;
+        }
+
+        .hero-title {
+            font-size: clamp(1.2rem, 8.5vw, 1.7rem);
+        }
+
+        .hero-eyebrow {
+            font-size: 0.6rem;
+        }
+
+        .hero-sub {
+            font-size: 0.72rem;
+            padding: 0 0.2rem;
+        }
+
+        .chat-box-inline {
+            height: clamp(220px, 38vh, 300px);
+        }
+
+        .user-bubble,
+        .assistant-bubble {
+            max-width: 95%;
+            font-size: 0.75rem;
+            padding: 6px 9px;
+        }
+
+        .stButton > button {
+            font-size: 0.75rem !important;
+            padding: 0.4rem 0.7rem !important;
+        }
+
+        .predict-btn .stButton > button {
+            font-size: 0.82rem !important;
+            padding: 0.6rem 1rem !important;
+        }
+
+        .result-card {
+            padding: 10px 12px;
+        }
+
+        .result-label {
+            font-size: 0.6rem;
+        }
+
+        .rec-text {
+            font-size: 0.8rem;
+        }
+
+        .prob-name {
+            width: 100%;
+            flex-basis: 100%;
+        }
+
+        .prob-track {
+            flex: 1 1 60%;
+        }
     }
 </style>
 
@@ -780,13 +1167,13 @@ col_main, col_chat = st.columns([3, 2])
 # ── RIGHT COLUMN — CHATBOT ──────────────────────────────────────
 with col_chat:
     st.markdown("""
-    <div style="padding-top:0.8rem; padding-left:1.2rem;">
-        <div class="section-label" style="padding-left:0;">◈ Field Assistant Chat</div>
+    <div class="chat-panel-header">
+        <div class="section-label">◈ Field Assistant Chat</div>
     </div>
     """, unsafe_allow_html=True)
 
     # Render chat history
-    chat_html = '<div class="chat-container" id="chat-box" style="height:470px; margin:0; margin-left:1.2rem;">'
+    chat_html = '<div class="chat-container chat-box-inline" id="chat-box">'
     if not st.session_state.chat_messages:
         chat_html += '<div class="chat-empty">Ask me anything about<br>crops, soil, or plant health…</div>'
     for msg in st.session_state.chat_messages:
@@ -832,7 +1219,7 @@ with col_main:
 
     # ── Hero header ──
     st.markdown("""
-    <div class="main-hero" style="padding-top:0.4rem;">
+    <div class="main-hero" style="padding-top:0rem;">
         <div class="hero-eyebrow">Vision + Soil Fusion Model</div>
         <div class="hero-title">Leaf <em>Deficiency</em><br>Detection</div>
         <div class="hero-sub">Upload a leaf image · set soil parameters · get instant diagnosis</div>
@@ -873,7 +1260,7 @@ with col_main:
 
         # ── Leaf image with frame ──
         st.markdown('<div class="leaf-frame">', unsafe_allow_html=True)
-        st.image(result_img, use_container_width=False, width=400)
+        st.image(result_img, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
