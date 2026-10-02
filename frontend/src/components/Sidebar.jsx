@@ -39,7 +39,7 @@ export default function Sidebar({
           </button>
           <div className="sidebar-brand-main">
             <img
-              src="../public/Multimodal Nutri AI.png"
+              src="../public/logo.png"
               alt="NutriAI"
               className="sidebar-brand-image"
             />
