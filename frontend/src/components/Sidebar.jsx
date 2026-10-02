@@ -39,7 +39,7 @@ export default function Sidebar({
           </button>
           <div className="sidebar-brand-main">
             <img
-              src="../public/logo.png"
+              src="/logo.png"
               alt="NutriAI"
               className="sidebar-brand-image"
             />
