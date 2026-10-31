@@ -11,3 +11,4 @@ gdown
 requests
 Markdown
 bleach
+python-dotenv
