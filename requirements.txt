@@ -9,3 +9,4 @@ Pillow
 joblib
 gdown
 requests
+Markdown
