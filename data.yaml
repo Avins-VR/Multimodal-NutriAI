@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['cri-tr']
+
+roboflow:
+  workspace: coffee-healthy-leaf
+  project: xyz-group
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/coffee-healthy-leaf/xyz-group/dataset/1
