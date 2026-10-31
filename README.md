@@ -183,21 +183,6 @@ Multimodal NutriAI integrates an **LLM-powered chatbot** for better farmer inter
 
 ---
 
-## 🔄 Future Work
-
-### 🔹 Self-Learning Feedback System
-
-- Track crop improvement over time  
-- Compare before/after conditions  
-- Learn from real-world outcomes  
-
-👉 Enables:
-
-- Continuous model improvement  
-- Personalized recommendations  
-
----
-
 ## 🚀 What Makes Multimodal NutriAI Unique?
 
 | Feature | Traditional Systems | Multimodal NutriAI |
